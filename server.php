@@ -11,6 +11,7 @@ use Logic\Log;
 use Logic\ChatsStorage;
 use Logic\Services;
 use Logic\Validator;
+use Logic\Config;
 
 define("ROOT", dirname(__FILE__));
 define("STORAGE", ROOT.DIRECTORY_SEPARATOR.'storage');
@@ -657,7 +658,7 @@ $server->addAction('addOperatorMessageToChat', function($server, $clientUid, $da
     }
 });
 
-$server->addWorker(['delay'=>10.0, 'repeat'=>600.0], function($server){
+$server->addWorker(['delay'=>10.0, 'repeat'=>Config::USAGE_INFO_INTERVAL], function($server){
     $userStorage = Services::getUsersStorage();    
     Log::write("Worker informations: ".json_encode($userStorage->getInfo()));   
 });
