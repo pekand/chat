@@ -657,7 +657,7 @@ $server->addAction('addOperatorMessageToChat', function($server, $clientUid, $da
     }
 });
 
-$server->addWorker(['delay'=>10.0, 'repeat'=>60.0], function($server){
+$server->addWorker(['delay'=>10.0, 'repeat'=>600.0], function($server){
     $userStorage = Services::getUsersStorage();    
     Log::write("Worker informations: ".json_encode($userStorage->getInfo()));   
 });
