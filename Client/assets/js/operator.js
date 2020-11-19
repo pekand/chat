@@ -3,7 +3,7 @@ var app = {
         this.chats = [];
         this.logged = false;
         this.clientUid = false;
-        this.connection = websocket.init();
+        this.connection = websocket.init(WEBSOCKET_ENDPOINT);
 
         this.bindComponents();
         this.bindEvents();
@@ -106,22 +106,28 @@ var app = {
            for(var key in data.chatHistory.messages){
              var message = data.chatHistory.messages[key];
              
-             if (message.type=='operator') {
+             if (message.role=='operator') {
                this.chats[data.chatUid].addMessageSource(message.message);
              } 
              
-             if (message.type=='client') {
+             if (message.role=='client') {
                this.chats[data.chatUid].addMessageTarget(message.message);
              }
            }
         }
         
         if(data.action == "clientAddMessageToChat"){
-           this.chats[data.chatUid].addMessageTarget(data.message);
+            if(this.chats[data.chatUid] !== undefined) {
+                this.chats[data.chatUid].unhide();
+                this.chats[data.chatUid].addMessageTarget(data.message, true);
+            }
         }
         
         if(data.action == "operatorAddMessageToChat"){
-           this.chats[data.chatUid].addMessageSource(data.message);
+            if(this.chats[data.chatUid] !== undefined) {
+                this.chats[data.chatUid].unhide();
+                this.chats[data.chatUid].addMessageSource(data.message);
+            }
         }
 
         if(data.action == "chatOpen"){
@@ -129,26 +135,33 @@ var app = {
            this.connection.sendMessage({action:'getChatHistory', chatUid:data.chatUid});
         }   
         
-        if(data.action == "chatClosed"){
-           this.chats[data.chatUid].chatboxWrapper.remove();
-           this.chats[data.chatUid] = null;
+        if(data.action == "chatClosed"){ 
+            if(this.chats[data.chatUid] !== undefined) {
+               this.chats[data.chatUid].addMessageTarget("[Client left chat]", true);
+            }
         }       
     },
     
     createChatbox: function(client){
         this.chatsContainer.appendChild(this.el('<div id="'+client+'" class="chatbox__wrapper"></div>'))
-        this.chats[client] = chatbox(client);
+        this.chats[client] = chatbox(client, true);
         this.chats[client].setTitle(client);
-        this.chats[client].addSendMessageListener(this.sendMessageClick.bind(this))
+        this.chats[client].addCloseChatListener(this.closeButtonClick.bind(this));
+        this.chats[client].addSendMessageListener(this.sendMessageClick.bind(this));
         this.chats[client].show();
     },
        
+    closeButtonClick: function(chatbox) {
+        this.chats[chatbox.chatboxId].hide();
+    },
+
     sendMessageClick: function(message, chatbox) {
         
         var data = {
             action: "addOperatorMessageToChat",
             chatUid: chatbox.chatboxWrapper.id,
-            message: message
+            message: message,
+            type: "message"
         }
 
         this.connection.sendMessage(data);

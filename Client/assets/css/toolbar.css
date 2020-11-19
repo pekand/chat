@@ -1,7 +1,7 @@
 .toolbar{
 	height: 50px;
-	width: 200%;
-	padding-left:10px;
+	width: 100%;
+	padding-left:0px;
 	background-color: rgb(63, 92, 147);	
 }
 

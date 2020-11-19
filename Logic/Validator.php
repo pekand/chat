@@ -40,51 +40,91 @@ class Validator
 				continue;
 			}
 			
-			if($value === null) {
-				if(!isset($this->rules[$key]['null']) || $this->rules[$key]['null'] === false){
-					$this->errors[$key][] = 'value is null';
-				}
-			} else {
+			if($value === null && isset($this->rules[$key]['allowNull'])) {
+
+			    if($this->rules[$key]['allowNull'] === false) {
+                    $this->errors[$key][] = 'value is null';
+                }
+
+			} else if($value === "" && isset($this->rules[$key]['allowEmpty'])) {
+
+			    if($this->rules[$key]['allowEmpty'] === false) {
+                    $this->errors[$key][] = 'value is empty';
+                }
+
+            } else {
 				
 				foreach ($this->rules[$key] as $rule => $ruleValue) {
-					if($rule == 'inSet' && (!isset($ruleValue['values']) || !in_array($value, $ruleValue['values']))) {
-						$this->errors[$key][] = 'value is not from set of values';
+					if($rule == 'inSet') {
+                        if(!isset($ruleValue['values']) || !in_array($value, $ruleValue['values'])) {
+                            $this->errors[$key][] = 'value is not from set of values';
+                        }
 					}
 					
-					if($rule == 'length' && isset($ruleValue['min']) && strlen($value)<$ruleValue['min']) {
-						$this->errors[$key][] = 'lenght is smaller then '.$ruleValue['min'];
+					if($rule == 'length' && isset($ruleValue['min'])) {
+                        if(strlen($value)<$ruleValue['min']) {
+                            $this->errors[$key][] = 'lenght is smaller then ' . $ruleValue['min'];
+                        }
 					}
 					
-					if($rule == 'length' && isset($ruleValue['max']) && $ruleValue['max']<strlen($value)) {
-						$this->errors[$key][] = 'lenght is bigger then '.$ruleValue['max'];
+					if($rule == 'length' && isset($ruleValue['max'])) {
+                        if($ruleValue['max']<strlen($value)) {
+                            $this->errors[$key][] = 'lenght is bigger then ' . $ruleValue['max'];
+                        }
 					}
 					
-					if($rule == 'interval' && isset($ruleValue['min']) && (!is_numeric($value) || $value<$ruleValue['min'])) {
-						$this->errors[$key][] = 'value is smaller then '.$ruleValue['min'];
+					if($rule == 'interval' && isset($ruleValue['min'])) {
+                        if(!is_numeric($value) || $value<$ruleValue['min']) {
+                            $this->errors[$key][] = 'value is smaller then ' . $ruleValue['min'];
+                        }
 					}
 					
-					if($rule == 'interval' && isset($ruleValue['max']) && (!is_numeric($value) || $ruleValue['max']<$value)) {
-						$this->errors[$key][] = 'value is bigger then '.$ruleValue['max'];
+					if($rule == 'interval' && isset($ruleValue['max'])) {
+					    if(!is_numeric($value) || $ruleValue['max'] < $value) {
+                            $this->errors[$key][] = 'value is bigger then ' . $ruleValue['max'];
+                        }
+					}
+
+                    if($rule == 'type' && $ruleValue == 'uid') {
+                        if(!preg_match('/^[0-9a-zA-Z]{32}$/', $value)) {
+                            $this->errors[$key][] = 'value is not type of uid';
+                        }
+                    }
+
+					if($rule == 'type' && $ruleValue == 'int') {
+                        if(!is_int($value)) {
+                            $this->errors[$key][] = 'value is not type of integer';
+                        }
 					}
 					
-					if($rule == 'type' && isset($ruleValue['type']) && $ruleValue == 'int' && !is_int($value)) {
-						$this->errors[$key][] = 'value is not type of integer';
+					if($rule == 'type' && $ruleValue == 'float') {
+                        if(!is_float($value)) {
+                            $this->errors[$key][] = 'value is not type of float';
+                        }
 					}
 					
-					if($rule == 'type' && isset($ruleValue['type']) && $ruleValue == 'float' && !is_float($value)) {
-						$this->errors[$key][] = 'value is not type of float';
+					if($rule == 'type' && $ruleValue == 'numeric') {
+                        if(!is_numeric($value)) {
+                            $this->errors[$key][] = 'value is not type of numeric';
+                        }
 					}
 					
-					if($rule == 'type' && isset($ruleValue['type']) && $ruleValue == 'numeric' && !is_numeric($value)) {
-						$this->errors[$key][] = 'value is not type of float';
+					if($rule == 'type' && $ruleValue == 'string') {
+                        if(!is_string($value)) {
+                            $this->errors[$key][] = 'value is not type of string';
+                        }
 					}
 					
-					if($rule == 'type' && isset($ruleValue['type']) && $ruleValue == 'string' && !is_string($value)) {
-						$this->errors[$key][] = 'value is not type of float';
+					if($rule == 'type' && $ruleValue == 'message_type') {
+					    if(!($value == "message" || $value == "info")){
+                            $this->errors[$key][] = 'invalid message type';
+                        }
 					}
-					
-					if($rule == 'match' && !preg_match($ruleValue, $value)) {
-						$this->errors[$key][] = 'value is not match';
+
+					if($rule == 'match') {
+                        if(!preg_match($ruleValue, $value)) {
+                            $this->errors[$key][] = 'value is not match regex';
+                        }
 					}
 				}
 			}

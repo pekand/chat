@@ -10,13 +10,21 @@ class ChatsStorage
     public function __construct() {
            
     }
-     
-    public function uid() {
-        return bin2hex(openssl_random_pseudo_bytes(16));
+
+    public function uid($length = 32) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $bytes = openssl_random_pseudo_bytes($length);
+        $string = "";
+
+        for ($i = 0; $i < $length; $i++) {
+            $string .= $characters[ord($bytes[$i]) % $charactersLength];
+        }
+
+        return $string;
     }
-    
-    public function isUid($uid)
-    {
+
+    public function isUid($length = 32) {
         return true;
     }
     
@@ -143,23 +151,24 @@ class ChatsStorage
         return $this->chats[$chatUid];
     }
     
-    public function addMessage($chatUid, $clientUid, $message, $type)
+    public function addMessage($chatUid, $clientUid, $message, $role, $type)
     {
         if (!isset($this->chats[$chatUid])){
             return false;
         }
         
         $this->chats[$chatUid]['messages'][] = [
-            'type' => $type,
+            'role' => $role,
             'from' => $clientUid,
             'time' => microtime(true),
             'message' => $message,
+            'type' => $type,
         ] ;
         
         return true;
     }
     
-    public function addOperatorMessage($chatUid, $operatorUid, $message)
+    public function addOperatorMessage($chatUid, $operatorUid, $message, $type)
     {        
         if (!isset($this->chats[$chatUid])){
             return false;
@@ -169,10 +178,10 @@ class ChatsStorage
             $this->chats[$chatUid]['participants']['operators'][] = $operatorUid;
         }
         
-        return $this->addMessage($chatUid, $operatorUid, $message, 'operator');
+        return $this->addMessage($chatUid, $operatorUid, $message, 'operator', $type);
     }
     
-    public function addClientMessage($chatUid, $clientUid, $message)
+    public function addClientMessage($chatUid, $clientUid, $message, $type)
     {        
         if (!isset($this->chats[$chatUid])){
             return false;
@@ -182,7 +191,7 @@ class ChatsStorage
             $this->chats[$chatUid]['participants']['clients'][] = $clientUid;
         }
         
-        return $this->addMessage($chatUid, $clientUid, $message, 'client');
+        return $this->addMessage($chatUid, $clientUid, $message, 'client', $type);
     }
     
     public function saveChat($chatUid)

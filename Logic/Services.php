@@ -7,6 +7,7 @@ class Services
 {
     static $chatsStorage = null;
     static $usersStorage = null;
+    static $usersManager = null;
     
     public static function init()
     {
@@ -47,5 +48,14 @@ class Services
         }
         
         return self::$usersStorage;
+    }
+
+    public static function getUsersManager()
+    {
+        if (self::$usersManager == null){
+            self::$usersManager = new UsersManager(self::getUsersStorage());
+        }
+        
+        return self::$usersManager;
     }
 }

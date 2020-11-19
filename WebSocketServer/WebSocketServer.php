@@ -34,6 +34,11 @@ class WebSocketServer extends WebSocketServerBase {
         });
         return $this;
     }
+
+    public function afterDataRecived($afterDataRecivedEvent){ 
+        $this->afterDataRecivedEvent = $afterDataRecivedEvent;
+        return $this;
+    }
     
     public function clientConnected($clientConnectedEvent){ 
         $this->clientConnectedEvent = $clientConnectedEvent;
@@ -177,12 +182,17 @@ class WebSocketServer extends WebSocketServerBase {
                 }
                 
                 $frames = [];
+
                 try {
                     $frames = $this->proccessRequest($lastFrame, $data);
                 } catch (\Exception $e) {                    
                     if (isset($this->afterClientError) && is_callable($this->afterClientError)) {
                         call_user_func_array($this->afterClientError, [$this, $clientUid, null, $e->getMessage()]);
                     }
+                }
+
+                if (isset($this->afterDataRecivedEvent) && is_callable($this->afterDataRecivedEvent)) {
+                     call_user_func_array($this->afterDataRecivedEvent, [$this, $clientUid, $data, $frames]);
                 }
                     
                 foreach ($frames as $frame) {                    

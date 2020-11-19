@@ -3,14 +3,20 @@ var websocket = {
     afterConnectionListeners:[],
     afterDisconnectionListeners:[],
     
-    init: function(chatboxId) {
+    init: function(endpoint) {
+        this.endpoint = endpoint;
+
+        if (typeof window.WebSocket == "undefined") {
+            return;
+        }
+
         this.createConnection();
         this.bindEvents();
         return this;
     },
     
     createConnection: function() {
-        this.conn = new WebSocket('wss://socket.pekand.com:8080');
+        this.conn = new WebSocket(this.endpoint);
         this.conn.onopen = this.connectionOpen.bind(this);
         this.conn.onclose = this.connectionClose.bind(this);
         this.conn.onerror = this.connectionError.bind(this);

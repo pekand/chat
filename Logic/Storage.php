@@ -11,9 +11,22 @@ class Storage
 	public function __construct($storagePath, $subDir) {
            $this->storagePath = $storagePath . DIRECTORY_SEPARATOR . $subDir;
     }
-    
-    public function uid() {
-        return bin2hex(openssl_random_pseudo_bytes(16));
+
+    public function uid($length = 32) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $bytes = openssl_random_pseudo_bytes($length);
+        $string = "";
+
+        for ($i = 0; $i < $length; $i++) {
+            $string .= $characters[ord($bytes[$i]) % $charactersLength];
+        }
+
+        return $string;
+    }
+
+    public function isUid($length = 32) {
+        return true;
     }
     
     public function get($name) {
