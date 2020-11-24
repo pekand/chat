@@ -1,17 +1,16 @@
 <?php
 
 set_time_limit(0);
+define("ROOT_PATH", dirname(__FILE__));
+require_once(ROOT_PATH.'/config.php');
+require_once(ROOT_PATH.'/vendor/autoload.php');
 
-spl_autoload_register(function ($class_name) {
-    require_once dirname(__FILE__).DIRECTORY_SEPARATOR.str_replace("\\", "/", $class_name) . '.php';
-});
-
-use WebSocketServer\WebSocketServer;
-use Logic\Log;
-use Logic\ChatsStorage;
-use Logic\Services;
-use Logic\Validator;
-use Logic\Config;
+use pekand\WebSocketServer\WebSocketServer;
+use pekand\Log\Log;
+use pekand\Chat\ChatsStorage;
+use pekand\Chat\Services;
+use pekand\Chat\Validator;
+use pekand\Chat\Connection;
 
 define("ROOT", dirname(__FILE__));
 define("STORAGE", ROOT.DIRECTORY_SEPARATOR.'storage');
@@ -21,7 +20,7 @@ Services::init();
 Log::setAllowdSeverity([
     'INFO', 
     'ERROR', 
-    'DEBUG',
+    \Config::DEBUG_MODE ? 'DEBUG' : 'PRODUCTION',
 ]);
 
 Log::write("WEBSOCKET SERVER START");
@@ -430,29 +429,29 @@ $server->addAction('openChat', function($server, $clientUid, $data) {
     }
     
     $chatStorage = Services::getChatStorage();
-        
-    $isChatAllreadyOpen = false;
-    if($data['chatUid'] != '' && $chatStorage->isChatOpen($data['chatUid'])){
-        $isChatAllreadyOpen = true;
-    }
-    
-    $chatUid = $chatStorage->openChat($data['chatUid']);
- 
+
+    $chatUid = $data['chatUid'];
+
     $userStorage = Services::getUsersStorage();
- 
-    if(!$isChatAllreadyOpen) {
-        foreach ($userStorage->getOperators() as $operatorUid => $value) { 
+
+    if(!$chatStorage->isChatOpen($chatUid)) {
+        $chatUid = $chatStorage->openChat($chatUid);
+
+        $notficationManager = Services::getNotficationManager();
+        $notficationManager->sendNotification($clientUid, $chatUid);
+
+        foreach ($userStorage->getOperators() as $operatorUid => $value) {
             Log::write("({$clientUid}) Client open chat {$chatUid}");
             $server->send($operatorUid , [
-                'action'=>'chatOpen', 
+                'action'=>'chatOpen',
                 'chatUid'=> $chatUid,
                 'chatHistory' => $chatStorage->getChatHistory($chatUid)
-            ]); 
-        }  
+            ]);
+        }
     }
 
-    if(!$chatStorage->isClientInChat($data['chatUid'], $clientUid)){
-        $chatStorage->addClientToChat($data['chatUid'], $clientUid);
+    if(!$chatStorage->isClientInChat($chatUid, $clientUid)){
+        $chatStorage->addClientToChat($chatUid, $clientUid);
         
         $server->send($clientUid, [
             'action'=>'chatUid', 
@@ -488,7 +487,7 @@ $server->addAction('getAllOpenChats', function($server, $clientUid, $data){
         $chatStorage->addOperatorToAllChats($clientUid);
         $server->send($clientUid, ['action'=>'allOpenChats', 'chats'=>$chatStorage->getChats()]);               
     }  else {
-        $server->send($clientUid, ['action'=>'accessDenied', 'forbidden'=>'getChats']);   
+        $server->send($clientUid, ['action'=>'accessDenied', 'errors'=>['clientUid' => "user is not operator"]]);   
     }
 });
 
@@ -653,7 +652,6 @@ $server->addAction('addClientMessageToChat', function($server, $clientUid, $data
             'message'=>$data['message'],
         ]);   
     }   
-    $userStorage = Services::getUsersStorage();
     
     foreach ($userStorage->getOperators() as $operatorUid => $operator) {
         if($operatorUid == $clientUid) {
@@ -732,11 +730,17 @@ $server->addAction('addOperatorMessageToChat', function($server, $clientUid, $da
     }
 });
 
-$server->addWorker(['delay'=>10.0, 'repeat'=>Config::USAGE_INFO_INTERVAL], function($server){
+$server->addWorker(['delay'=>10.0, 'repeat'=>\Config::USAGE_INFO_INTERVAL], function($server){
     $userStorage = Services::getUsersStorage();    
     Log::write("Worker informations: ".json_encode($userStorage->getInfo()));   
 });
 
+$server->addWorker(['delay'=>10.0, 'repeat'=>\Config::EMAIL_API_NOTIFICATION_INTERVAL], function($server){
+    $notficationManager = Services::getNotficationManager();
+    $notficationManager->sendNotification();
+    $notficationManager->cleanReportedChats();
+    Log::write("NOTIFICATIONS INTERVAL CHECK");   
+});
 
 $server->listen();
 

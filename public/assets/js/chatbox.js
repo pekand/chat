@@ -39,6 +39,7 @@ function chatbox(chatboxId, closeButton){return {
         if(this.chatbox.classList.contains("chatbox-closed")) {
             this.chatbox.classList.remove("chatbox-closed");
             this.chatbox.classList.add("chatbox-open");
+            this.chatboxMessges.scrollTop = this.chatboxMessges.scrollHeight;
 
             for (var listener of this.openChatListeners) {
                 if (listener && typeof(listener) === "function") {

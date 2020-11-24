@@ -1,10 +1,10 @@
-.chatbox {
-    width: 300px;
+.chatbox__wrapper {
+    float:left;
 }
 
-.chatbox__wrapper {
+.chatbox {
+    width: 300px;
     margin: 20px 0px 0px 20px;
-    float:left;
 }
 
 .chatbox-open {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Logic;
+namespace pekand\Chat;
 
 class ChatsStorage
 {
@@ -30,7 +30,7 @@ class ChatsStorage
     
     public function isChatOpen($chatUid)
     {       
-        if (isset($this->chats[$chatUid])) {
+        if ($chatUid != null && $chatUid != "" && isset($this->chats[$chatUid])) {
             return true;
         }
 
@@ -181,6 +181,29 @@ class ChatsStorage
         return $this->addMessage($chatUid, $operatorUid, $message, 'operator', $type);
     }
     
+    public function addClientToChat($chatUid, $clientUid)
+    {     
+        if ($chatUid === null || $clientUid === null){
+            return false;
+        }
+
+        if (!isset($this->chats[$chatUid])){
+            return false;
+        }
+
+        if(in_array($clientUid, $this->chats[$chatUid]['participants']['operators'])){
+            return false;
+        }
+        
+        if(in_array($clientUid, $this->chats[$chatUid]['participants']['clients'])){
+            return false;
+        }
+
+        $this->chats[$chatUid]['participants']['clients'][] = $clientUid;
+        
+        return true;
+    }
+
     public function addClientMessage($chatUid, $clientUid, $message, $type)
     {        
         if (!isset($this->chats[$chatUid])){
@@ -188,7 +211,7 @@ class ChatsStorage
         }
         
         if(!in_array($clientUid, $this->chats[$chatUid]['participants']['clients'])){
-            $this->chats[$chatUid]['participants']['clients'][] = $clientUid;
+            return false;
         }
         
         return $this->addMessage($chatUid, $clientUid, $message, 'client', $type);
@@ -270,17 +293,6 @@ class ChatsStorage
         }
         
         return true;
-    }
-    
-    public function addClientToChat($chatUid, $clientUid)
-    {
-        if (!isset($this->chats[$chatUid])){
-            return;
-        }
-        
-        if (!in_array($clientUid, $this->chats[$chatUid]['participants']['clients'])) {
-            $this->chats[$chatUid]['participants']['clients'][] = $clientUid;
-        }
     }
 
     public function removeClientFromAllChats($clientUid)

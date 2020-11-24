@@ -1,7 +1,6 @@
 <?php
 
-namespace Logic;
-
+namespace pekand\Chat;
 
 class Validator
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Logic;
+namespace pekand\Chat;
 
 // business logic
 class Services
@@ -8,6 +8,8 @@ class Services
     static $chatsStorage = null;
     static $usersStorage = null;
     static $usersManager = null;
+    static $notificationManager = null;
+    static $emailApi = null;
     
     public static function init()
     {
@@ -57,5 +59,29 @@ class Services
         }
         
         return self::$usersManager;
+    }
+
+    public static function getEmailApiConnection()
+    {
+        if (self::$emailApi == null) {
+                self::$emailApi = new \pekand\Chat\Connection([
+                    'timeout' => \Config::EMAIL_API_TIMEOUT,
+                    'skipSSL' => \Config::EMAIL_API_SKIP_SSL_VERIFICATION,
+                    'certificate' => \Config::EMAIL_API_CERTIFICATE,
+                ],
+                \Config::EMAIL_API_ENDPOINT
+            );
+        }
+        
+        return self::$emailApi;
+    }
+
+    public static function getNotficationManager()
+    {
+        if (self::$notificationManager == null) {
+                self::$notificationManager = new \pekand\Chat\NotificationManager();
+        }
+        
+        return self::$notificationManager;
     }
 }

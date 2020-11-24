@@ -1,4 +1,8 @@
+.idea
+vendor
+storage/cert/*
 storage/chats/*
 storage/log/*
 storage/tokens/*
 storage/users/*
+/config.php

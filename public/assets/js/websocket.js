@@ -43,8 +43,8 @@ var websocket = {
         }
     },
 
-    connectionError: function() {
-        L('Error: ' + error.message);
+    connectionError: function(error) {
+        L('Connection error');
     },
 
     getMessage: function(e) {

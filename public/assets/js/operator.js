@@ -66,6 +66,7 @@ var app = {
         
         if(data.action == "loginSuccess"){
             localStorage.setItem('operatorToken', data.token);
+            history.replaceState({success:true}, 'Websocket Console', "/");
             this.logged = true;
             this.connection.sendMessage({action:'getAllOpenChats'});
         }
@@ -157,6 +158,10 @@ var app = {
 
     sendMessageClick: function(message, chatbox) {
         
+        if(message.length>10000){
+          return;
+        }
+
         var data = {
             action: "addOperatorMessageToChat",
             chatUid: chatbox.chatboxWrapper.id,

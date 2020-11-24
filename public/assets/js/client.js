@@ -89,6 +89,10 @@ var app = {
        
     sendMessageClick: function(message) {
     	
+        if(message.length>10000){
+          return;
+        }
+        
         var data = {
             action: "addClientMessageToChat",
             chatUid: this.chatUid,

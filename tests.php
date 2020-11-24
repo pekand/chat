@@ -2,9 +2,9 @@
 
 set_time_limit(0);
 
-spl_autoload_register(function ($class_name) {
-    require_once dirname(__FILE__)."/".str_replace("\\", "/", $class_name) . '.php';
-});
+define("ROOT_PATH", dirname(__FILE__));
+require_once(ROOT_PATH.'/config.php');
+require_once(ROOT_PATH.'/vendor/autoload.php');
 
 if (isset($argv[1]) && $argv[1]=='chats') {
 	include dirname(__FILE__)."/Tests/client-chats.php";

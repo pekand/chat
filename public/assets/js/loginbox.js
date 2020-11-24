@@ -10,7 +10,7 @@ function loginBox(loginBoxId){return {
     bindComponents: function(loginBoxId){
         this.loginBoxWrapper = document.getElementById(loginBoxId);
         
-        this.loginBoxWrapper.appendChild(this.el('<div class="login"><div class="login__title">Login To Your Account</div><div class="login__message"></div><form><input type="text" placeholder="username" class="login__username" /><input type="password" placeholder="password" class="login__password"/><input type="submit" class="login__send" value="login"></form></div>'));
+        this.loginBoxWrapper.appendChild(this.el('<div class="login"><div class="login__title">Login To Your Account</div><div class="login__message"></div><form action="/" method="POST"><input type="text" placeholder="username" class="login__username" /><input type="password" placeholder="password" class="login__password"/><input type="submit" class="login__send" value="login"></form></div>'));
        
         this.loginBox = this.loginBoxWrapper.getElementsByClassName("login")[0];
         this.loginBoxTitle = this.loginBox.getElementsByClassName("login__title")[0];
