@@ -3,20 +3,6 @@
     "description": "Description",
     "type": "project",
     "homepage": "https://www.pekand.com",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "git@github.com:pekand/log.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pekand/socketserver.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pekand/websocketserver.git"
-        }
-    ],
     "require": {
         "pekand/log": "^1.0",
         "pekand/socketserver": "^1.0",

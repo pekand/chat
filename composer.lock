@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0bf5653be8b5f8feddb03849c94017f",
+    "content-hash": "a5b8c11dcba9f0e83fd33f709abf7bb2",
     "packages": [
         {
             "name": "pekand/log",
@@ -29,15 +29,15 @@
                     "pekand\\Log\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "pekand <pekand@gmail.com> ",
+                    "name": "pekand <pekand@gmail.com>",
                     "email": "pekand@gmail.com",
-                    "homepage": "https://www.pekand.com",
-                    "role": ""
+                    "homepage": "https://www.pekand.com"
                 }
             ],
             "description": "log",
@@ -45,10 +45,6 @@
             "keywords": [
                 "websocketserver"
             ],
-            "support": {
-                "source": "https://github.com/pekand/log/tree/1.0.0",
-                "issues": "https://github.com/pekand/log/issues"
-            },
             "time": "2020-11-19T16:08:55+00:00"
         },
         {
@@ -74,15 +70,15 @@
                     "pekand\\SocketServer\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "pekand <pekand@gmail.com> ",
+                    "name": "pekand <pekand@gmail.com>",
                     "email": "pekand@gmail.com",
-                    "homepage": "https://www.pekand.com",
-                    "role": ""
+                    "homepage": "https://www.pekand.com"
                 }
             ],
             "description": "socket server",
@@ -90,10 +86,6 @@
             "keywords": [
                 "socketserver"
             ],
-            "support": {
-                "source": "https://github.com/pekand/socketserver/tree/1.0.0",
-                "issues": "https://github.com/pekand/socketserver/issues"
-            },
             "time": "2020-11-19T16:17:38+00:00"
         },
         {
@@ -119,15 +111,15 @@
                     "pekand\\WebSocketServer\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "pekand <pekand@gmail.com> ",
+                    "name": "pekand <pekand@gmail.com>",
                     "email": "pekand@gmail.com",
-                    "homepage": "https://www.pekand.com",
-                    "role": ""
+                    "homepage": "https://www.pekand.com"
                 }
             ],
             "description": "websocket server",
@@ -135,10 +127,6 @@
             "keywords": [
                 "websocketserver"
             ],
-            "support": {
-                "source": "https://github.com/pekand/websocketserver/tree/1.0.0",
-                "issues": "https://github.com/pekand/websocketserver/issues"
-            },
             "time": "2020-11-19T16:23:06+00:00"
         },
         {
