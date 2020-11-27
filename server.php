@@ -1,23 +1,22 @@
 <?php
 
 set_time_limit(0);
+
 define("ROOT_PATH", dirname(__FILE__));
 require_once(ROOT_PATH.'/config.php');
 require_once(ROOT_PATH.'/vendor/autoload.php');
 
 use pekand\WebSocketServer\WebSocketServer;
 use pekand\Log\Log;
-use pekand\Chat\ChatsStorage;
 use pekand\Chat\Services;
 use pekand\Chat\Validator;
-use pekand\Chat\Connection;
 
 define("ROOT", dirname(__FILE__));
 define("STORAGE", ROOT.DIRECTORY_SEPARATOR.'storage');
 
 Services::init();
 
-Log::setAllowdSeverity([
+Log::setAllowedSeverity([
     'INFO', 
     'ERROR', 
     \Config::DEBUG_MODE ? 'DEBUG' : 'PRODUCTION',

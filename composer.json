@@ -6,11 +6,9 @@
     "require": {
         "pekand/log": "^1.0",
         "pekand/socketserver": "^1.0",
-        "pekand/websocketserver": "^1.0",
-        "phpmailer/phpmailer": "v6.1.7"
+        "pekand/websocketserver": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "9.3.11"
     },
     "autoload": {
         "psr-4": {

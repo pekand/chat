@@ -35,6 +35,10 @@ class NotificationManager
 
     function sendNotification($clientUid = null , $chatUid = null){
 
+        if(\Config::EMAIL_API_SENDEMAIL_ENDPOINT === null) {
+            return;
+        }
+
         if($chatUid !== null && !in_array($chatUid, $this->chats) && !isset($this->reportedChats[$chatUid])) {
             $this->chats[] = $chatUid;
             $this->reportedChats[$chatUid] = [

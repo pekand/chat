@@ -52,15 +52,6 @@ class Services
         return self::$usersStorage;
     }
 
-    public static function getUsersManager()
-    {
-        if (self::$usersManager == null){
-            self::$usersManager = new UsersManager(self::getUsersStorage());
-        }
-        
-        return self::$usersManager;
-    }
-
     public static function getEmailApiConnection()
     {
         if (self::$emailApi == null) {
