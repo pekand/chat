@@ -59,11 +59,14 @@ class NotificationManager
         $subject = 'Client connected to chat';
         $body = '<h1>Client connected to chat</h1> <p>chat: '.print_r($this->chats, true).'</p> <br> <p><a href="https://socket.pekand.com/">link to page</a></p>';
 
-        $out = $emailApi->post(\Config::EMAIL_API_SENDEMAIL_ENDPOINT, [], [
-            'action' => "sendEmail",
-            'subject' => $subject,
-            'body' => $body,
-        ]);
+        $out = null;
+        if(!\Config::DEBUG_MODE) {
+            $out = $emailApi->post(\Config::EMAIL_API_SENDEMAIL_ENDPOINT, [], [
+                'action' => "sendEmail",
+                'subject' => $subject,
+                'body' => $body,
+            ]);
+        }
 
         Log::write("({$clientUid}) EMAILAPI: ".print_r([
             'output' => $out,

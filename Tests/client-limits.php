@@ -8,13 +8,14 @@ $state = [];
 
 $pool = new WebSocketPool();
 
-for($i=0; $i<100; $i++){
+for($i=0; $i<1; $i++){
     $client = new WebSocketClient();
     $clients[$i] = $client;
     
     $client->afterConnect(function ($client) {
         echo "After connect\n";
         $client->send(['action'=>'getUid']);
+        return true;
     });
 
     $client->addAction('ping', function ($client, $data) {   
@@ -52,6 +53,10 @@ for($i=0; $i<100; $i++){
     $pool->addAction(['delay'=>1000000], function() use ($client, $i){
         echo "C{$i} Client open new chat\n";        
         $client->send(['action'=>'openChat', 'chatUid'=>'']);
+    });
+
+    $pool->addAction(['delay'=>1000000, 'repeat'=>1000000], function() use ($client, $i){
+        //echo "tick\n";
     });
 
     
