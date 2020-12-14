@@ -49,16 +49,16 @@
         },
         {
             "name": "pekand/socketserver",
-            "version": "1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pekand/socketserver.git",
-                "reference": "a084ba8f282dbab0624a08ab60400bb3bd89821a"
+                "reference": "a2ff78c51d5394c67eabad7866a5e179ddb76242"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pekand/socketserver/zipball/a084ba8f282dbab0624a08ab60400bb3bd89821a",
-                "reference": "a084ba8f282dbab0624a08ab60400bb3bd89821a",
+                "url": "https://api.github.com/repos/pekand/socketserver/zipball/a2ff78c51d5394c67eabad7866a5e179ddb76242",
+                "reference": "a2ff78c51d5394c67eabad7866a5e179ddb76242",
                 "shasum": ""
             },
             "require": {
@@ -86,20 +86,20 @@
             "keywords": [
                 "socketserver"
             ],
-            "time": "2020-11-19T16:17:38+00:00"
+            "time": "2020-12-14T15:48:17+00:00"
         },
         {
             "name": "pekand/websocketserver",
-            "version": "1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pekand/websocketserver.git",
-                "reference": "3b320aa88d159b0a8f1397b26534278904398f66"
+                "reference": "f563e79948516c3108801a7fce8924d334ab9476"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pekand/websocketserver/zipball/3b320aa88d159b0a8f1397b26534278904398f66",
-                "reference": "3b320aa88d159b0a8f1397b26534278904398f66",
+                "url": "https://api.github.com/repos/pekand/websocketserver/zipball/f563e79948516c3108801a7fce8924d334ab9476",
+                "reference": "f563e79948516c3108801a7fce8924d334ab9476",
                 "shasum": ""
             },
             "require": {
@@ -127,7 +127,7 @@
             "keywords": [
                 "websocketserver"
             ],
-            "time": "2020-11-19T16:23:06+00:00"
+            "time": "2020-12-14T15:49:14+00:00"
         }
     ],
     "packages-dev": [],

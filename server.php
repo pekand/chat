@@ -25,7 +25,6 @@ Log::setAllowedSeverity([
 Log::write("WEBSOCKET SERVER START");
 
 $server = new WebSocketServer([
-    'ip' => '127.0.0.1',
     'port' => 8080
 ]);
 
